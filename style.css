@@ -1,0 +1,481 @@
+/* =========================================================
+   CASE FILES - style.css
+   Custom styles that Tailwind utility classes don't cover:
+   paper sheets, manila folders, the cork evidence board,
+   pinned clue cards, polaroid suspects and rubber stamps.
+   ========================================================= */
+
+/* ---------- 1. Colour variables ---------- */
+:root {
+  --bg: #13110f;          /* dark office background */
+  --paper: #efe6d2;       /* typed paper */
+  --paper-dark: #e2d5b8;
+  --manila: #d9b77a;      /* folder colour */
+  --cork: #8a5a33;        /* evidence board */
+  --ink: #2a241d;
+  --red: #b3261e;         /* stamps and string */
+  --green: #2f7d4a;
+  --amber: #f0b429;
+}
+
+/* ---------- 2. Page basics ---------- */
+body {
+  color: #e7e5e4;
+  font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  background-color: var(--bg);
+  /* desk-lamp glow in the corner */
+  background-image:
+    radial-gradient(circle at 80% 0%, rgba(240, 180, 41, 0.12), transparent 45%),
+    radial-gradient(circle at 0% 100%, rgba(179, 38, 30, 0.08), transparent 40%);
+  background-attachment: fixed;
+}
+
+.typewriter {
+  font-family: "Special Elite", "Courier New", monospace;
+}
+
+:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 3px;
+}
+
+/* ---------- 3. Top bar ---------- */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(19, 17, 15, 0.92);
+  border-bottom: 1px solid #3a342d;
+  backdrop-filter: blur(6px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 1.4rem;
+  color: #f5f5f4;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logo-stamp {
+  padding: 0 0.4rem;
+  color: var(--red);
+  border: 2px solid var(--red);
+  border-radius: 0.2rem;
+  transform: rotate(-4deg);
+}
+
+/* ---------- 4. Screens ---------- */
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+  animation: fadeIn 0.35s ease;
+}
+
+/* ---------- 5. Buttons ---------- */
+.btn {
+  min-height: 46px;
+  padding: 0.7rem 1.2rem;
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 1rem;
+  border: 2px solid;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-red {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.btn-red:hover:not(:disabled) {
+  box-shadow: 0 0 18px rgba(179, 38, 30, 0.6);
+}
+
+.btn-amber {
+  color: var(--ink);
+  background: var(--amber);
+  border-color: var(--amber);
+}
+
+.btn-amber:hover:not(:disabled) {
+  box-shadow: 0 0 18px rgba(240, 180, 41, 0.5);
+}
+
+.btn-dark {
+  color: var(--paper);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.btn-ghost {
+  color: #e7e5e4;
+  background: transparent;
+  border-color: #57534e;
+}
+
+.btn-ghost:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.btn-ghost-dark {
+  color: var(--ink);
+  background: transparent;
+  border-color: var(--ink);
+}
+
+/* ---------- 6. Detective ID card ---------- */
+.id-card {
+  padding: 1.5rem;
+  color: var(--ink);
+  background: var(--paper);
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  transform: rotate(-1deg);
+}
+
+.id-photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 5.5rem;
+  font-size: 2.5rem;
+  background: var(--paper-dark);
+  border: 2px solid var(--ink);
+}
+
+.id-stat {
+  padding: 0.6rem 0.75rem;
+  background: var(--paper-dark);
+  border-radius: 0.4rem;
+}
+
+.id-stat dt {
+  font-size: 0.75rem;
+  color: #57534e;
+}
+
+.id-stat dd {
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 1.4rem;
+}
+
+/* ---------- 7. Manila case folders (case list) ---------- */
+.folder {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem 1.5rem 1.5rem;
+  margin-top: 1.5rem;          /* room for the tab */
+  color: var(--ink);
+  text-align: left;
+  background: var(--manila);
+  border-radius: 0 0.6rem 0.6rem 0.6rem;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* The folder tab sticking out at the top */
+.folder::before {
+  content: attr(data-tab);
+  position: absolute;
+  top: -1.6rem;
+  left: 0;
+  padding: 0.25rem 1rem;
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 0.85rem;
+  background: var(--manila);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.folder:hover,
+.folder:focus-visible {
+  transform: translateY(-6px) rotate(-0.5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- 8. Rubber stamps and status chips ---------- */
+.stamp {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  padding: 0.2rem 0.7rem;
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  border: 3px solid;
+  border-radius: 0.3rem;
+  transform: rotate(8deg);
+  opacity: 0.85;
+}
+
+.stamp-open   { color: #1d4ed8; border-color: #1d4ed8; }
+.stamp-solved { color: var(--green); border-color: var(--green); }
+.stamp-failed { color: var(--red); border-color: var(--red); }
+
+.status-chip {
+  padding: 0.4rem 1rem;
+  font-family: "Special Elite", "Courier New", monospace;
+  letter-spacing: 0.1em;
+  border: 2px solid;
+  border-radius: 999px;
+}
+
+.status-open   { color: #93c5fd; border-color: #93c5fd; }
+.status-solved { color: #86efac; border-color: #86efac; }
+.status-failed { color: #fca5a5; border-color: #fca5a5; }
+
+/* ---------- 9. Paper sheet (case brief) ---------- */
+.paper {
+  padding: 1.75rem;
+  color: var(--ink);
+  line-height: 1.65;
+  /* faint ruled lines like a notepad */
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 27px, rgba(42, 36, 29, 0.08) 27px 28px),
+    var(--paper);
+  border-radius: 0.4rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.objective-box {
+  padding: 0.9rem 1rem;
+  background: rgba(240, 180, 41, 0.25);
+  border-left: 4px solid var(--red);
+}
+
+/* ---------- 10. Cork evidence board and clue cards ---------- */
+.cork-board {
+  padding: 1.5rem;
+  background-color: var(--cork);
+  /* little dots make it look like cork */
+  background-image:
+    radial-gradient(rgba(0, 0, 0, 0.18) 1px, transparent 1.5px),
+    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1.5px);
+  background-size: 14px 14px, 22px 22px;
+  border: 10px solid #5b3a1e;   /* wooden frame */
+  border-radius: 0.6rem;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.45), 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.board-label {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  font-family: "Special Elite", "Courier New", monospace;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.clue-card {
+  position: relative;
+  min-height: 150px;
+  padding: 1.4rem 1.1rem 1.1rem;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s ease;
+}
+
+/* Tilt cards slightly in different directions, like they were pinned by hand */
+.clue-card:nth-child(odd)  { transform: rotate(-1.2deg); }
+.clue-card:nth-child(even) { transform: rotate(1deg); }
+
+/* Red push-pin at the top of every card */
+.clue-card::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  background: radial-gradient(circle at 35% 35%, #ff6b6b, var(--red) 60%, #6b0f0a);
+  border-radius: 50%;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* A clue that hasn't been revealed yet: a sealed evidence envelope */
+.clue-card.sealed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6b5a3e;
+  text-align: center;
+  background: repeating-linear-gradient(45deg, var(--manila), var(--manila) 10px, #cfa96a 10px, #cfa96a 20px);
+}
+
+.clue-card.just-revealed {
+  animation: reveal 0.45s ease;
+}
+
+.clue-type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+/* ---------- 11. Suspect polaroids ---------- */
+.suspect-card {
+  position: relative;
+  padding: 0.9rem 0.9rem 1.25rem;
+  color: var(--ink);
+  text-align: left;
+  background: #fbf8f1;
+  border: 3px solid transparent;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.suspect-card:nth-child(1) { transform: rotate(-1.5deg); }
+.suspect-card:nth-child(2) { transform: rotate(1deg); }
+.suspect-card:nth-child(3) { transform: rotate(-0.5deg); }
+
+.suspect-card:hover:not(:disabled) {
+  transform: rotate(0deg) translateY(-4px);
+}
+
+.suspect-card.selected {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 4px rgba(240, 180, 41, 0.35), 0 10px 24px rgba(0, 0, 0, 0.5);
+  transform: rotate(0deg) translateY(-4px);
+}
+
+.suspect-card:disabled {
+  cursor: default;
+}
+
+.suspect-photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  font-size: 4rem;
+  background: linear-gradient(160deg, #4b4a47, #24221f);
+}
+
+.suspect-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #78716c;
+  text-transform: uppercase;
+}
+
+/* "GUILTY" / "CLEARED" stamp on a suspect after the case is closed */
+.suspect-stamp {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  padding: 0.2rem 0.8rem;
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 1.6rem;
+  letter-spacing: 0.1em;
+  background: rgba(251, 248, 241, 0.85);
+  border: 4px solid;
+  border-radius: 0.3rem;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  animation: stampIn 0.4s ease;
+}
+
+.stamp-guilty  { color: var(--red); border-color: var(--red); }
+.stamp-cleared { color: #57534e; border-color: #57534e; font-size: 1.1rem; }
+
+/* ---------- 12. Accusation bar and verdict ---------- */
+.accuse-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: #1f1b17;
+  border: 2px dashed #57534e;
+  border-radius: 0.6rem;
+}
+
+.verdict {
+  margin-top: 2rem;
+  padding: 2rem 1.75rem;
+  color: var(--ink);
+  background: var(--paper);
+  border-radius: 0.5rem;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+  animation: fadeIn 0.4s ease;
+}
+
+.verdict-stamp {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  font-family: "Special Elite", "Courier New", monospace;
+  font-size: 1.8rem;
+  letter-spacing: 0.1em;
+  border: 4px solid;
+  border-radius: 0.3rem;
+  transform: rotate(-3deg);
+  animation: stampIn 0.45s ease;
+}
+
+.verdict-correct { color: var(--green); border-color: var(--green); }
+.verdict-wrong   { color: var(--red); border-color: var(--red); }
+
+.solution-steps {
+  padding-left: 1.4rem;
+  list-style: decimal;
+  line-height: 1.65;
+}
+
+.solution-steps li {
+  margin-bottom: 0.6rem;
+}
+
+/* ---------- 13. Animations ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: rotateY(90deg); }
+  to   { opacity: 1; }
+}
+
+@keyframes stampIn {
+  0%   { opacity: 0; scale: 1.8; }
+  100% { opacity: 1; scale: 1; }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

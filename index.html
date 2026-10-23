@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Case Files - an interactive detective game with fictional mysteries.">
+  <title>Case Files</title>
+
+  <!-- Tailwind CSS (browser CDN). Needs internet to load the styles. -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Typewriter font for the case files (falls back to Courier when offline) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+
+  <!-- Our own custom styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="flex min-h-screen flex-col">
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header class="top-bar">
+    <div class="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
+      <button id="logo-button" class="logo" aria-label="Back to case list">
+        <span class="logo-stamp">CASE</span> FILES
+      </button>
+      <div class="flex items-center gap-4 text-sm">
+        <span>🏅 Score: <strong id="header-score" class="text-amber-300">0</strong></span>
+        <span class="hidden sm:inline">📁 Closed: <strong id="header-closed" class="text-amber-300">0 / 2</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
+
+    <!-- ===================== CASE LIST SCREEN ===================== -->
+    <section id="case-list-screen" class="screen active" aria-labelledby="case-list-title">
+      <div class="grid gap-8 lg:grid-cols-[320px_1fr]">
+
+        <!-- Detective profile -->
+        <aside class="id-card self-start">
+          <p class="typewriter text-xs tracking-widest text-stone-600">DETECTIVE ID CARD</p>
+          <div class="mt-4 flex items-center gap-4">
+            <div class="id-photo" aria-hidden="true">🕵️</div>
+            <div>
+              <p class="typewriter text-lg">YOU</p>
+              <p id="detective-rank" class="typewriter text-sm text-red-800">Rookie</p>
+            </div>
+          </div>
+          <dl class="mt-5 grid grid-cols-2 gap-3">
+            <div class="id-stat">
+              <dt>Total score</dt>
+              <dd id="profile-score">0</dd>
+            </div>
+            <div class="id-stat">
+              <dt>Cases closed</dt>
+              <dd id="profile-closed">0 / 2</dd>
+            </div>
+            <div class="id-stat">
+              <dt>Solved</dt>
+              <dd id="profile-solved">0</dd>
+            </div>
+            <div class="id-stat">
+              <dt>Wrong arrests</dt>
+              <dd id="profile-failed">0</dd>
+            </div>
+          </dl>
+          <div class="mt-5 border-t border-dashed border-stone-500 pt-4 text-sm text-stone-700">
+            <p class="typewriter mb-1">HOW SCORING WORKS</p>
+            <p>A correct accusation earns <strong>100 points</strong>, minus <strong>10</strong> for every clue you revealed. A wrong accusation earns 0.</p>
+          </div>
+          <button id="reset-all" class="btn btn-dark mt-5 w-full">↺ Reset all progress</button>
+        </aside>
+
+        <!-- Case folders -->
+        <div>
+          <p class="typewriter text-sm tracking-widest text-amber-300">PRECINCT 9 &middot; OPEN INVESTIGATIONS</p>
+          <h1 id="case-list-title" class="typewriter mt-2 text-4xl text-stone-100 sm:text-5xl">Choose a case file</h1>
+          <p class="mt-3 max-w-2xl text-stone-300">
+            Read the case, reveal the evidence one clue at a time, study the three suspects,
+            then make your accusation. Every case can be solved from the clues alone.
+          </p>
+
+          <!-- Folders are created by JavaScript -->
+          <div id="case-folders" class="mt-8 grid gap-8 md:grid-cols-2"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== INVESTIGATION SCREEN ===================== -->
+    <section id="investigation-screen" class="screen" aria-labelledby="case-title">
+
+      <!-- Case header -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <button class="back-button btn btn-ghost">◀ Back to case list</button>
+          <h2 id="case-title" class="typewriter mt-4 text-3xl text-stone-100 sm:text-4xl">Case title</h2>
+          <p id="case-location" class="mt-1 text-stone-400"></p>
+        </div>
+        <span id="case-status" class="status-chip status-open">OPEN</span>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-12">
+
+        <!-- Case brief (paper sheet) -->
+        <article class="paper lg:col-span-4">
+          <p class="typewriter text-xs tracking-widest text-red-800">CONFIDENTIAL &middot; CASE BRIEF</p>
+          <h3 class="typewriter mt-4 text-lg">Background</h3>
+          <p id="case-intro" class="mt-1"></p>
+          <h3 class="typewriter mt-5 text-lg">The incident</h3>
+          <p id="case-description" class="mt-1"></p>
+          <div class="objective-box mt-5">
+            <p class="typewriter text-sm">🎯 YOUR OBJECTIVE</p>
+            <p id="case-objective" class="mt-1"></p>
+          </div>
+        </article>
+
+        <!-- Evidence board -->
+        <div class="cork-board lg:col-span-8">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <h3 class="board-label">EVIDENCE BOARD</h3>
+            <p id="clue-counter" class="board-label text-sm">0 / 5 clues revealed</p>
+          </div>
+
+          <!-- Clue cards are created by JavaScript -->
+          <div id="clue-board" class="mt-5 grid gap-5 sm:grid-cols-2"></div>
+
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <button id="reveal-clue-button" class="btn btn-amber">🔍 Reveal next clue</button>
+            <p id="reveal-note" class="text-sm text-amber-100">Each clue you reveal lowers your reward by 10 points.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Suspects -->
+      <div class="mt-10">
+        <h3 class="typewriter text-2xl text-stone-100">The suspects</h3>
+        <p class="mt-1 text-stone-400">Click a suspect to select them as your answer.</p>
+        <div id="suspect-list" class="mt-5 grid gap-6 md:grid-cols-3" role="radiogroup" aria-label="Suspects"></div>
+      </div>
+
+      <!-- Accusation bar -->
+      <div id="accuse-bar" class="accuse-bar mt-8">
+        <p class="text-stone-200">
+          Your accusation: <strong id="selected-suspect-name" class="typewriter text-amber-300">nobody selected</strong>
+        </p>
+        <button id="submit-answer-button" class="btn btn-red" disabled>⚖️ Submit accusation</button>
+      </div>
+
+      <!-- Verdict and solution (hidden until the answer is submitted) -->
+      <div id="verdict" class="verdict hidden" aria-live="polite">
+        <p id="verdict-stamp" class="verdict-stamp">CASE SOLVED</p>
+        <p id="verdict-message" class="mt-4 text-lg"></p>
+
+        <h3 class="typewriter mt-6 text-xl">The full solution</h3>
+        <ol id="solution-steps" class="solution-steps mt-3"></ol>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <button id="replay-button" class="btn btn-dark">↺ Replay this case</button>
+          <button id="next-case-button" class="btn btn-red">Next case ▶</button>
+          <button class="back-button btn btn-ghost-dark">◀ Back to case list</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="py-6 text-center text-sm text-stone-500">
+    <p>Case Files &middot; Made by Fawzia Tasnim</p>
+    <p class="mt-1 text-xs">All people, places and events in these cases are fictional.</p>
+  </footer>
+
+  <!-- Our JavaScript goes last so all HTML elements already exist -->
+  <script src="script.js"></script>
+</body>
+</html>
